@@ -196,7 +196,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
 
 let chartW = null, chartC = null, chartT = null, chartP = null, currentUser = '', modalCol = '', modalId = '';
 
@@ -1460,35 +1459,42 @@ async function saveDoc() {
   }
 }
 
-function uploadDocFile(file) {
+const CLOUDINARY_CLOUD_NAME = 'dggv3g2in';
+const CLOUDINARY_UPLOAD_PRESET = 'opd_docs';
+
+function cloudinaryUpload(file, onProgress) {
   return new Promise((resolve, reject) => {
-    const ref = storage.ref('documents/' + Date.now() + '_' + file.name);
-    const task = ref.put(file);
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-        document.getElementById('doc-upload-fill').style.width = pct + '%';
-        document.getElementById('doc-upload-status').textContent = 'กำลังอัปโหลด ' + pct + '%';
-      },
-      err => reject(err),
-      async () => { resolve(await task.snapshot.ref.getDownloadURL()); }
-    );
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/raw/upload`);
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable) onProgress(Math.round(e.loaded / e.total * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(JSON.parse(xhr.responseText).secure_url);
+      } else {
+        reject(new Error('อัปโหลดไม่สำเร็จ (' + xhr.status + ')'));
+      }
+    };
+    xhr.onerror = () => reject(new Error('เครือข่ายขัดข้อง'));
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    xhr.send(formData);
+  });
+}
+
+function uploadDocFile(file) {
+  return cloudinaryUpload(file, pct => {
+    document.getElementById('doc-upload-fill').style.width = pct + '%';
+    document.getElementById('doc-upload-status').textContent = 'กำลังอัปโหลด ' + pct + '%';
   });
 }
 
 function qdUploadFile(file) {
-  return new Promise((resolve, reject) => {
-    const ref = storage.ref('documents/qa/' + Date.now() + '_' + file.name);
-    const task = ref.put(file);
-    task.on('state_changed',
-      snap => {
-        const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-        document.getElementById('qd-upload-fill').style.width = pct + '%';
-        document.getElementById('qd-upload-status').textContent = 'กำลังอัปโหลด ' + pct + '%';
-      },
-      err => reject(err),
-      async () => { resolve(await task.snapshot.ref.getDownloadURL()); }
-    );
+  return cloudinaryUpload(file, pct => {
+    document.getElementById('qd-upload-fill').style.width = pct + '%';
+    document.getElementById('qd-upload-status').textContent = 'กำลังอัปโหลด ' + pct + '%';
   });
 }
 
