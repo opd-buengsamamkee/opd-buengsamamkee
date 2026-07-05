@@ -1128,6 +1128,8 @@ async function loadStaffDayStats(dateStr) {
 /* ═══════════════════════════════════════════════
    DOCS PAGE
 ═══════════════════════════════════════════════ */
+const FILE_ICON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+const LINK_ICON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 /* ── DOC CATEGORY MAP ── */
 const DOC_CATS = {
   manual_orient:  { label: 'คู่มือปฐมนิเทศ',   accentCls: 'manual' },
@@ -1205,8 +1207,8 @@ function renderDocs() {
 
   const accentCls = DOC_CATS[currentDocCat]?.accentCls || 'wi';
   filtered.forEach(doc => {
-    const icons = { pdf:'📄', word:'📝', excel:'📊', link:'🔗' };
     const iconCls = ['pdf','word','excel','link'].includes(doc.fileType) ? doc.fileType : 'link';
+    const iconSvg = iconCls === 'link' ? LINK_ICON_SVG : FILE_ICON_SVG;
     const date = doc.addedAt?.toDate ? dateTH(doc.addedAt.toDate().toISOString().slice(0,10)) : '—';
     const card = document.createElement('div');
     card.className = 'doc-card';
@@ -1214,7 +1216,7 @@ function renderDocs() {
       <div class="doc-card-accent ${accentCls}"></div>
       <div class="doc-card-body">
         <div style="display:flex;align-items:flex-start;gap:12px">
-          <div class="doc-card-icon ${iconCls}">${icons[iconCls]||'📄'}</div>
+          <div class="doc-card-icon ${iconCls}">${iconSvg}</div>
           <div style="flex:1;min-width:0">
             <div class="doc-card-title">${escHtml(doc.title||'ไม่มีชื่อ')}</div>
             ${doc.description ? `<div class="doc-card-desc">${escHtml(doc.description)}</div>` : ''}
@@ -1227,7 +1229,7 @@ function renderDocs() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               เปิด
             </a>
-            <button class="doc-del-btn" onclick="confirmDeleteDoc('${doc.id}')">
+            <button class="doc-del-btn" onclick="confirmDeleteDoc('${doc.id}')" aria-label="ลบเอกสาร ${escHtml(doc.title||'')}">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
           </div>
@@ -1267,9 +1269,11 @@ function setDocSource(src) {
 function handleDocFile(input) {
   const file = input.files[0];
   if (!file) return;
-  const icons = { pdf:'📄', doc:'📝', docx:'📝', xls:'📊', xlsx:'📊', ppt:'📑', pptx:'📑' };
   const ext = file.name.split('.').pop().toLowerCase();
-  document.getElementById('doc-file-icon').textContent = icons[ext] || '📄';
+  const fileType = ['xls','xlsx'].includes(ext) ? 'excel' : ['doc','docx'].includes(ext) ? 'word' : 'pdf';
+  const iconEl = document.getElementById('doc-file-icon');
+  iconEl.innerHTML = FILE_ICON_SVG;
+  iconEl.dataset.filetype = fileType;
   document.getElementById('doc-file-name').textContent = file.name;
   document.getElementById('doc-file-size').textContent = (file.size/1024/1024).toFixed(2) + ' MB';
   document.getElementById('doc-file-chosen').style.display = 'flex';
@@ -1293,9 +1297,8 @@ function qdHandleFile(input) {
   const file = input.files[0];
   if (!file) return;
   if (file.size > 20 * 1024 * 1024) { toast('ไฟล์ใหญ่เกิน 20MB', 'err'); input.value = ''; return; }
-  const icons = { pdf: '📕', doc: '📘', docx: '📘', xls: '📗', xlsx: '📗' };
   const ext = file.name.split('.').pop().toLowerCase();
-  document.getElementById('qd-file-icon').textContent = icons[ext] || '📄';
+  document.getElementById('qd-file-icon').innerHTML = FILE_ICON_SVG;
   document.getElementById('qd-file-name').textContent = file.name;
   document.getElementById('qd-file-size').textContent = (file.size / 1024).toFixed(0) + ' KB';
   document.getElementById('qd-file-chosen').style.display = 'flex';
@@ -1410,8 +1413,7 @@ async function saveDoc() {
     const preUploaded = document.getElementById('doc-uploaded-url').value;
     if (preUploaded) {
       url = preUploaded;
-      fileType = document.getElementById('doc-file-icon').textContent === '📊' ? 'excel'
-               : document.getElementById('doc-file-icon').textContent === '📝' ? 'word' : 'pdf';
+      fileType = document.getElementById('doc-file-icon').dataset.filetype || 'pdf';
     } else if (fileInput.files[0]) {
       const file = fileInput.files[0];
       const ext = file.name.split('.').pop().toLowerCase();
@@ -1593,7 +1595,7 @@ function renderNews() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               แก้ไข
             </button>
-            <button class="news-del-btn" onclick="confirmDeleteNews('${n.id}')">
+            <button class="news-del-btn" onclick="confirmDeleteNews('${n.id}')" aria-label="ลบข่าว ${escHtml(n.title||'')}">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
           </div>

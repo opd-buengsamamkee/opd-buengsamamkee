@@ -337,36 +337,36 @@
               <div class="wstaff-row">
                 <span class="wstaff-lbl">แพทย์ปฏิบัติงาน</span>
                 <div class="wnum-ctrl">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-doctor',-1)">−</button>
-                  <input type="number" id="e-doctor" min="0" value="0" class="wnum-inp">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-doctor',1)">+</button>
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-doctor',-1)" aria-label="ลดจำนวนแพทย์ปฏิบัติงาน">−</button>
+                  <input type="number" id="e-doctor" min="0" value="0" class="wnum-inp" aria-label="จำนวนแพทย์ปฏิบัติงาน">
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-doctor',1)" aria-label="เพิ่มจำนวนแพทย์ปฏิบัติงาน">+</button>
                 </div>
                 <span class="wstaff-unit">คน</span>
               </div>
               <div class="wstaff-row">
                 <span class="wstaff-lbl">พยาบาลวิชาชีพ</span>
                 <div class="wnum-ctrl">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-nurse',-1)">−</button>
-                  <input type="number" id="e-nurse" min="0" value="0" class="wnum-inp">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-nurse',1)">+</button>
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-nurse',-1)" aria-label="ลดจำนวนพยาบาลวิชาชีพ">−</button>
+                  <input type="number" id="e-nurse" min="0" value="0" class="wnum-inp" aria-label="จำนวนพยาบาลวิชาชีพ">
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-nurse',1)" aria-label="เพิ่มจำนวนพยาบาลวิชาชีพ">+</button>
                 </div>
                 <span class="wstaff-unit">คน</span>
               </div>
               <div class="wstaff-row">
                 <span class="wstaff-lbl">ผู้ช่วยเหลือคนไข้</span>
                 <div class="wnum-ctrl">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-helper',-1)">−</button>
-                  <input type="number" id="e-helper" min="0" value="0" class="wnum-inp">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-helper',1)">+</button>
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-helper',-1)" aria-label="ลดจำนวนผู้ช่วยเหลือคนไข้">−</button>
+                  <input type="number" id="e-helper" min="0" value="0" class="wnum-inp" aria-label="จำนวนผู้ช่วยเหลือคนไข้">
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-helper',1)" aria-label="เพิ่มจำนวนผู้ช่วยเหลือคนไข้">+</button>
                 </div>
                 <span class="wstaff-unit">คน</span>
               </div>
               <div class="wstaff-row">
                 <span class="wstaff-lbl">เจ้าหน้าที่เอกสาร</span>
                 <div class="wnum-ctrl">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-clerk',-1)">−</button>
-                  <input type="number" id="e-clerk" min="0" value="0" class="wnum-inp">
-                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-clerk',1)">+</button>
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-clerk',-1)" aria-label="ลดจำนวนเจ้าหน้าที่เอกสาร">−</button>
+                  <input type="number" id="e-clerk" min="0" value="0" class="wnum-inp" aria-label="จำนวนเจ้าหน้าที่เอกสาร">
+                  <button type="button" class="wnum-btn" onclick="wNumAdj('e-clerk',1)" aria-label="เพิ่มจำนวนเจ้าหน้าที่เอกสาร">+</button>
                 </div>
                 <span class="wstaff-unit">คน</span>
               </div>
@@ -1186,12 +1186,12 @@
           <label>เอกสาร <span style="color:var(--danger)">*</span></label>
           <input type="hidden" id="qd-url">
           <div id="qd-file-chosen" style="display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);margin-bottom:6px">
-            <span id="qd-file-icon" style="font-size:22px">📄</span>
+            <span id="qd-file-icon" style="font-size:22px;color:var(--text-light);display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
             <div style="flex:1;min-width:0">
               <div id="qd-file-name" style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
               <div id="qd-file-size" style="font-size:11px;color:var(--text3)"></div>
             </div>
-            <button type="button" onclick="qdClearFile()" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:18px;line-height:1">×</button>
+            <button type="button" onclick="qdClearFile()" aria-label="เอาไฟล์ที่เลือกออก" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:18px;line-height:1;min-width:32px;min-height:32px">×</button>
           </div>
           <div id="qd-dropzone" class="img-dropzone" onclick="document.getElementById('qd-file-input').click()" style="padding:1.4rem;display:flex">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--border2);margin-bottom:6px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
@@ -1260,7 +1260,7 @@
 <!-- EDIT MODAL -->
 <div class="modal-overlay hidden" id="edit-modal">
   <div class="modal-box">
-    <div class="modal-head"><h3 id="modal-title">แก้ไขข้อมูล</h3><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-head"><h3 id="modal-title">แก้ไขข้อมูล</h3><button class="modal-close" onclick="closeModal()" aria-label="ปิดหน้าต่างแก้ไขข้อมูล">×</button></div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-foot">
       <button class="btn-s" onclick="closeModal()">ยกเลิก</button>
@@ -1272,7 +1272,7 @@
 <!-- CONFIRM DELETE -->
 <div class="modal-overlay hidden" id="confirm-modal">
   <div class="modal-box" style="max-width:360px">
-    <div class="modal-head"><h3>ยืนยันการลบ</h3><button class="modal-close" onclick="closeConfirm()">×</button></div>
+    <div class="modal-head"><h3>ยืนยันการลบ</h3><button class="modal-close" onclick="closeConfirm()" aria-label="ปิดหน้าต่างยืนยันการลบ">×</button></div>
     <div class="modal-body"><p style="font-size:14px;color:var(--text-mid);line-height:1.75">ต้องการลบข้อมูลนี้หรือไม่?<br>การลบไม่สามารถย้อนกลับได้</p></div>
     <div class="modal-foot">
       <button class="btn-s" onclick="closeConfirm()">ยกเลิก</button>
@@ -1329,7 +1329,7 @@
   <div class="modal-box" style="max-width:500px" onclick="event.stopPropagation()">
     <div class="modal-head">
       <h3 id="doc-modal-title">เพิ่มเอกสาร</h3>
-      <button class="modal-close" onclick="closeDocModal()">×</button>
+      <button class="modal-close" onclick="closeDocModal()" aria-label="ปิดหน้าต่างเพิ่มเอกสาร">×</button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
       <input type="hidden" id="doc-edit-id">
@@ -1384,12 +1384,12 @@
       <!-- อัปโหลดไฟล์ -->
       <div id="doc-file-section">
         <div id="doc-file-chosen" style="display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border)">
-          <span id="doc-file-icon" style="font-size:22px">📄</span>
+          <span id="doc-file-icon" style="font-size:22px;color:var(--text-light);display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
           <div style="flex:1;min-width:0">
             <div id="doc-file-name" style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
             <div id="doc-file-size" style="font-size:11px;color:var(--text-light)"></div>
           </div>
-          <button type="button" onclick="clearDocFile()" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:18px;line-height:1">×</button>
+          <button type="button" onclick="clearDocFile()" aria-label="เอาไฟล์ที่เลือกออก" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:18px;line-height:1;min-width:32px;min-height:32px">×</button>
         </div>
         <div id="doc-dropzone" class="img-dropzone" onclick="document.getElementById('doc-file-input').click()" style="padding:1.4rem;display:flex">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--border2);margin-bottom:6px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
@@ -1478,7 +1478,7 @@
   <div class="modal-box" style="max-width:600px" onclick="event.stopPropagation()">
     <div class="modal-head">
       <h3 id="news-modal-title">เพิ่มข่าว</h3>
-      <button class="modal-close" onclick="closeNewsModal()">×</button>
+      <button class="modal-close" onclick="closeNewsModal()" aria-label="ปิดหน้าต่างเพิ่มข่าว">×</button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:16px">
       <input type="hidden" id="news-edit-id">

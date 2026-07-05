@@ -138,7 +138,7 @@ tbody tr:hover td{background:var(--blue-pale)}
 .b-purple{background:var(--purple-pale);color:var(--purple)}
 
 /* ── ACTION BUTTONS ── */
-.action-btn{font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;border:1.5px solid;background:#fff;font-family:inherit;transition:all .15s;margin-left:3px;font-weight:500}
+.action-btn{font-size:11px;padding:6px 12px;min-height:32px;border-radius:20px;cursor:pointer;border:1.5px solid;background:#fff;font-family:inherit;transition:all .15s;margin-left:3px;font-weight:500}
 .action-btn.edit{color:var(--blue);border-color:var(--blue-line)}
 .action-btn.edit:hover{background:var(--blue-pale)}
 .action-btn.del{color:var(--red);border-color:#FECACA}
@@ -272,7 +272,7 @@ tbody tr:hover td{background:var(--blue-pale)}
 @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-head{padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;border-radius:var(--radius-xl) var(--radius-xl) 0 0}
 .modal-head h3{font-size:15px;font-weight:700;color:var(--navy)}
-.modal-close{background:var(--bg);border:none;width:28px;height:28px;border-radius:50%;font-size:16px;color:var(--text-light);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close{background:var(--bg);border:none;width:36px;height:36px;border-radius:50%;font-size:18px;color:var(--text-light);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
 .modal-close:hover{background:var(--border);color:var(--text)}
 .modal-body{padding:1.5rem}
 .modal-foot{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:#FAFBFF;border-radius:0 0 var(--radius-xl) var(--radius-xl)}
@@ -308,6 +308,11 @@ tbody tr:hover td{background:var(--blue-pale)}
 .toast.ok{background:linear-gradient(135deg,var(--teal),#0EA5E9)}
 .toast.err{background:linear-gradient(135deg,var(--red),#F87171)}
 
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg)}
@@ -341,7 +346,7 @@ tbody tr:hover td{background:var(--blue-pale)}
 .doc-card-actions{display:flex;gap:6px}
 .doc-open-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--blue-pale);color:var(--blue);border:none;border-radius:7px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
 .doc-open-btn:hover{background:var(--blue);color:#fff}
-.doc-del-btn{display:inline-flex;align-items:center;padding:6px 8px;background:none;border:1.5px solid var(--border);border-radius:7px;color:var(--text-light);cursor:pointer;transition:all .2s}
+.doc-del-btn{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:6px 8px;background:none;border:1.5px solid var(--border);border-radius:7px;color:var(--text-light);cursor:pointer;transition:all .2s}
 .doc-del-btn:hover{background:#FEE2E2;border-color:#FECACA;color:#DC2626}
 .doc-empty{text-align:center;padding:3rem 1rem;grid-column:1/-1;display:flex;flex-direction:column;align-items:center}
 
@@ -371,7 +376,7 @@ tbody tr:hover td{background:var(--blue-pale)}
 .news-actions{display:flex;gap:6px}
 .news-edit-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:var(--blue-pale);color:var(--blue);border:none;border-radius:7px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .news-edit-btn:hover{background:var(--blue);color:#fff}
-.news-del-btn{display:inline-flex;align-items:center;padding:5px 8px;background:none;border:1.5px solid var(--border);border-radius:7px;color:var(--text-light);cursor:pointer;transition:all .2s}
+.news-del-btn{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;padding:5px 8px;background:none;border:1.5px solid var(--border);border-radius:7px;color:var(--text-light);cursor:pointer;transition:all .2s}
 .news-del-btn:hover{background:#FEE2E2;border-color:#FECACA;color:#DC2626}
 .news-empty{text-align:center;padding:3rem;color:var(--text-light);font-size:14px;background:var(--white);border:1.5px solid var(--border);border-radius:12px}
 
