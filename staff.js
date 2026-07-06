@@ -371,6 +371,7 @@ function showPage(id, btn) {
   if (id === 'docs') loadDocs(currentDocCat);
   if (id === 'news') loadNews();
   if (id === 'entry') wReset();
+  if (id === 'qa-doc') loadQaDocs();
 }
 
 /* ── TOAST ── */
@@ -1319,6 +1320,8 @@ function qdClearFile() {
 function qdReset() {
   ['qd-module','qd-title','qd-url','qd-desc'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   const ft = document.getElementById('qd-filetype'); if(ft) ft.value = 'pdf';
+  const editId = document.getElementById('qd-edit-id'); if(editId) editId.value = '';
+  document.getElementById('qd-save-btn').textContent = 'บันทึกเอกสาร';
   qdClearFile();
 }
 
@@ -1350,6 +1353,7 @@ async function qdSave() {
 
   if (!url) { toast('กรุณาเลือกไฟล์', 'err'); btn.disabled = false; return; }
 
+  const editId = document.getElementById('qd-edit-id').value;
   const payload = {
     title,
     category:    'qa',
@@ -1361,14 +1365,85 @@ async function qdSave() {
     addedAt:     firebase.firestore.FieldValue.serverTimestamp(),
   };
   try {
-    await db.collection('documents').add(payload);
-    toast('บันทึกเอกสารสำเร็จ');
+    if (editId) {
+      await db.collection('documents').doc(editId).update(payload);
+      toast('อัปเดตเอกสารเรียบร้อย');
+    } else {
+      await db.collection('documents').add(payload);
+      toast('บันทึกเอกสารสำเร็จ');
+    }
     qdReset();
+    loadQaDocs();
   } catch(err) {
     toast('บันทึกไม่สำเร็จ', 'err');
     console.error(err);
   }
   btn.disabled = false;
+}
+
+let allQaDocs = [];
+
+async function loadQaDocs() {
+  const listEl = document.getElementById('qd-doc-list');
+  if (!listEl) return;
+  listEl.innerHTML = '<p style="color:var(--text-light);font-size:13px">กำลังโหลด...</p>';
+  try {
+    const snap = await db.collection('documents').where('category','==','qa').get();
+    allQaDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a,b) => (a.qaModule||'').localeCompare(b.qaModule||'') || (a.title||'').localeCompare(b.title||''));
+    renderQaDocs();
+  } catch(e) {
+    console.error('loadQaDocs:', e);
+    listEl.innerHTML = '<p style="color:var(--red);font-size:13px">โหลดข้อมูลไม่สำเร็จ</p>';
+  }
+}
+
+const QA_MODULE_LABEL = {1:'หมวด 1 · การนำองค์กร',2:'หมวด 2 · กลยุทธ์',3:'หมวด 3 · ผู้ใช้บริการ',4:'หมวด 4 · การวัด วิเคราะห์ และการจัดการความรู้',5:'หมวด 5 · บุคลากร',6:'หมวด 6 · การปฏิบัติการพยาบาล',7:'หมวด 7 · ผลลัพธ์ทางการพยาบาล'};
+
+function renderQaDocs() {
+  const listEl = document.getElementById('qd-doc-list');
+  if (!listEl) return;
+  if (allQaDocs.length === 0) {
+    listEl.innerHTML = '<p style="color:var(--text-light);font-size:13px">ยังไม่มีเอกสาร QA</p>';
+    return;
+  }
+  listEl.innerHTML = allQaDocs.map(doc => `
+    <div class="doc-row-item" style="border-bottom:1px solid var(--border);padding:10px 0;display:flex;align-items:center;gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(doc.title||'ไม่มีชื่อ')}</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:2px">${escHtml(QA_MODULE_LABEL[doc.qaModule]||('หมวด '+(doc.qaModule||'—')))}</div>
+      </div>
+      <button type="button" class="action-btn edit" onclick="editQaDoc('${doc.id}')">แก้ไข</button>
+      <button type="button" class="action-btn del" onclick="confirmDeleteQaDoc('${doc.id}')">ลบ</button>
+    </div>`).join('');
+}
+
+function editQaDoc(id) {
+  const doc = allQaDocs.find(d => d.id === id);
+  if (!doc) return;
+  document.getElementById('qd-edit-id').value = doc.id;
+  document.getElementById('qd-module').value = doc.qaModule || '';
+  document.getElementById('qd-title').value = doc.title || '';
+  document.getElementById('qd-desc').value = doc.description || '';
+  document.getElementById('qd-filetype').value = doc.fileType || 'pdf';
+  document.getElementById('qd-uploaded-url').value = doc.url || '';
+  document.getElementById('qd-save-btn').textContent = 'อัปเดตเอกสาร';
+  document.getElementById('qd-file-chosen').style.display = 'none';
+  document.getElementById('qd-dropzone').style.display = 'flex';
+  document.getElementById('qd-file-input').value = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function confirmDeleteQaDoc(id) {
+  if (!confirm('ต้องการลบเอกสารนี้หรือไม่?')) return;
+  try {
+    await db.collection('documents').doc(id).delete();
+    toast('ลบเอกสารเรียบร้อย');
+    loadQaDocs();
+  } catch(e) {
+    toast('ลบไม่สำเร็จ', 'err');
+    console.error(e);
+  }
 }
 function openDocModal(editDoc, showQa = false) {
   document.getElementById('doc-modal-title').textContent = editDoc ? 'แก้ไขเอกสาร' : 'เพิ่มเอกสาร';

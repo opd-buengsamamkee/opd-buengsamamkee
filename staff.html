@@ -1163,6 +1163,7 @@
       <div class="sec-title">เพิ่มเอกสาร QA</div>
 
       <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.75rem 2rem;margin-top:1.5rem;box-shadow:var(--shadow)">
+        <input type="hidden" id="qd-edit-id">
         <div class="field">
           <label>หมวด QA <span style="color:var(--danger)">*</span></label>
           <select id="qd-module" onchange="qdModuleChange()">
@@ -1227,6 +1228,11 @@
           <button class="btn-s" onclick="qdReset()">ล้างข้อมูล</button>
           <button class="btn-p" id="qd-save-btn" onclick="qdSave()">บันทึกเอกสาร</button>
         </div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem 2rem;margin-top:1.25rem;box-shadow:var(--shadow)">
+        <div class="sec-label" style="margin-bottom:.75rem">เอกสาร QA ทั้งหมด</div>
+        <div id="qd-doc-list"><p style="color:var(--text-light);font-size:13px">กำลังโหลด...</p></div>
       </div>
     </div>
   </div>
