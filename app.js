@@ -131,7 +131,7 @@ async function showQaPage(num) {
       const ft = doc.fileType || 'link';
       return `<a href="${escHtmlAttr(doc.url||'#')}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:.55rem 0;border-bottom:1px solid var(--border2);text-decoration:none;color:inherit">
         <div style="width:9px;height:9px;border-radius:2px;background:${bullet};opacity:.75;flex-shrink:0"></div>
-        <span style="font-size:14px;font-weight:600;color:#3B5BDB;flex:1;line-height:1.4">${escHtml(doc.title||'ไม่มีชื่อ')}</span>
+        <span style="font-size:14px;font-weight:600;color:#3B5BDB;flex:1;line-height:1.4">${escHtmlAttr(doc.title||'ไม่มีชื่อ')}</span>
         <span style="font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:4px;background:var(--primary-light);color:var(--primary)">${ftLabel[ft]||ft}</span>
       </a>`;
     }).join('');
