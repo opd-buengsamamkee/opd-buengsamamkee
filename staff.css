@@ -2,6 +2,7 @@
 :root{
   --navy:#0F1F3D;--blue:#1E56C4;--blue-mid:#2563EB;--blue-light:#3B82F6;
   --blue-pale:#EFF6FF;--blue-line:#BFDBFE;
+  --primary:#1E56C4;--primary-dark:#0F1F3D;--primary-light:#EFF6FF;--primary-mid:#2563EB;
   --teal:#0D9488;--teal-pale:#F0FDFA;--teal-line:#99F6E4;
   --amber:#D97706;--amber-pale:#FFFBEB;
   --red:#DC2626;--red-pale:#FEF2F2;
